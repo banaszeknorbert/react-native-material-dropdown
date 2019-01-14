@@ -29,6 +29,7 @@ export default class Dropdown extends PureComponent {
     valueExtractor: ({ value } = {}, index) => value,
     labelExtractor: ({ label } = {}, index) => label,
     propsExtractor: () => null,
+    onDismiss: () => {},
 
     absoluteRTLLayout: false,
 
@@ -142,6 +143,7 @@ export default class Dropdown extends PureComponent {
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
     onChangeText: PropTypes.func,
+    onDismiss: PropTypes.func,
 
     renderBase: PropTypes.func,
     renderAccessory: PropTypes.func,
@@ -734,6 +736,7 @@ export default class Dropdown extends PureComponent {
         </TouchableWithoutFeedback>
 
         <Modal
+          onDismiss={this.props.onDismiss}
           visible={modal}
           transparent={true}
           onRequestClose={this.blur}
