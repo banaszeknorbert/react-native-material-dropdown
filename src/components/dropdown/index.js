@@ -322,7 +322,7 @@ export default class Dropdown extends PureComponent {
   }
 
   onClose(value = this.state.value) {
-    if (this.props.finishImmediately) {
+    if (this.props.closeImmediately) {
       this.focused = false;
       if (this.mounted) {
         this.setState({ value, modal: false });
