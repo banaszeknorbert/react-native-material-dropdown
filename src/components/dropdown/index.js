@@ -23,6 +23,8 @@ export default class Dropdown extends PureComponent {
     hitSlop: { top: 6, right: 4, bottom: 6, left: 4 },
 
     disabled: false,
+    
+    closeImmediately: false,
 
     data: [],
 
@@ -83,6 +85,8 @@ export default class Dropdown extends PureComponent {
     ...TouchableWithoutFeedback.propTypes,
 
     disabled: PropTypes.bool,
+    
+    closeImmediately: PropTypes.bool,
 
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -318,26 +322,33 @@ export default class Dropdown extends PureComponent {
   }
 
   onClose(value = this.state.value) {
-    let { onBlur, animationDuration, useNativeDriver } = this.props;
-    let { opacity } = this.state;
-
-    Animated
-      .timing(opacity, {
-        duration: animationDuration,
-        toValue: 0,
-        useNativeDriver,
-      })
-      .start(() => {
-        this.focused = false;
-
-        if ('function' === typeof onBlur) {
-          onBlur();
-        }
-
-        if (this.mounted) {
-          this.setState({ value, modal: false });
-        }
-      });
+    if (this.props.finishImmediately) {
+      this.focused = false;
+      if (this.mounted) {
+        this.setState({ value, modal: false });
+      }
+    } else {
+      let { onBlur, animationDuration, useNativeDriver } = this.props;
+      let { opacity } = this.state;
+  
+      Animated
+        .timing(opacity, {
+          duration: animationDuration,
+          toValue: 0,
+          useNativeDriver,
+        })
+        .start(() => {
+          this.focused = false;
+  
+          if ('function' === typeof onBlur) {
+            onBlur();
+          }
+  
+          if (this.mounted) {
+            this.setState({ value, modal: false });
+          }
+        });
+    }
   }
 
   onSelect(index) {
